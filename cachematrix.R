@@ -6,7 +6,9 @@
 makeCacheMatrix <- function(x = matrix()) {
   inverse_data <- NULL
   set <- function(y) {
+    ## x is assigned the value of y used with the global assignment so that the value can be accessed outside of the environment
     x <<- y
+    ## setting the inverse_data to null until the cacheSolve function is called
     inverse_data <<- NULL
   }
   get <- function() x
@@ -18,11 +20,14 @@ makeCacheMatrix <- function(x = matrix()) {
 
 cacheSolve <- function(x, ...) {
   inverse_data <- x$getInverse()
+  ## check if the value of inverse_data is null
+  ## if so, get the cached data
   if (!is.null(inverse_data)) {
     message("getting cached data")
     return(inverse_data)
   }
   value <- x$get()
+  ## the solve() function applies linear algebra to solve for the inverse
   inverse_data <- solve(value, ...)
   x$setInverse(inverse_data)
   inverse_data
@@ -33,8 +38,11 @@ cacheSolve <- function(x, ...) {
 mat_data <- makeCacheMatrix(matrix(c(1/2,-1/4,-1,3/4), nrow = 2, ncol = 2))
 mat_data$get()
 cacheSolve(mat_data)
+mat_data$getInverse()
 
 mat_data <- makeCacheMatrix(matrix(c(5/8, -1/8, -7/8, 3/8), nrow = 2, ncol = 2))
 mat_data$get()
 cacheSolve(mat_data)
+mat_data$getInverse()
+
 
